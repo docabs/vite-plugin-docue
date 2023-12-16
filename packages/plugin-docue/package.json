@@ -1,0 +1,39 @@
+{
+  "name": "vite-plugin-docue",
+  "version": "0.3.0",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "scripts": {
+    "dev": "unbuild --stub",
+    "build": "unbuild && pnpm run patch-cjs",
+    "patch-cjs": "tsx ../../scripts/patchCJS.ts",
+    "prepublishOnly": "npm run build"
+  },
+  "engines": {
+    "node": "^18.0.0 || >=20.0.0"
+  },
+  "peerDependencies": {
+    "vite": "^5.0.0",
+    "docuejs": "^0.0"
+  },
+  "devDependencies": {
+    "@jridgewell/gen-mapping": "^0.3.3",
+    "@jridgewell/trace-mapping": "^0.3.20",
+    "debug": "^4.3.4",
+    "rollup": "^4.6.1",
+    "slash": "^5.1.0",
+    "source-map-js": "^1.0.2",
+    "vite": "^5.0.6",
+    "docuejs": "^0.0"
+  }
+}

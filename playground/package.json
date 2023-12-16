@@ -1,0 +1,13 @@
+{
+  "name": "@docabs/vite-docue-playground",
+  "private": true,
+  "version": "1.0.0",
+  "devDependencies": {
+    "@types/node": "^20.10.3",
+    "convert-source-map": "^2.0.0",
+    "css-color-names": "^1.0.1",
+    "kill-port": "^1.6.1",
+    "node-fetch": "^3.3.2",
+    "sirv": "^2.0.3"
+  }
+}

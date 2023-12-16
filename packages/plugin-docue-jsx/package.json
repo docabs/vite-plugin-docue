@@ -1,0 +1,38 @@
+{
+  "name": "vite-plugin-docue-jsx",
+  "version": "3.1.0",
+  "license": "MIT",
+  "author": "Evan You",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "scripts": {
+    "dev": "unbuild --stub",
+    "build": "unbuild && pnpm run patch-cjs",
+    "patch-cjs": "tsx ../../scripts/patchCJS.ts",
+    "prepublishOnly": "npm run build"
+  },
+  "engines": {
+    "node": "^18.0.0 || >=20.0.0"
+  },
+  "dependencies": {
+    "@babel/core": "^7.23.5",
+    "@babel/plugin-transform-typescript": "^7.23.5"
+  },
+  "devDependencies": {
+    "vite": "^5.0.6"
+  },
+  "peerDependencies": {
+    "vite": "^5.0.0",
+    "docuejs": "^0.0"
+  }
+}
