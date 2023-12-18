@@ -42,14 +42,14 @@ export function getPrevDescriptor(filename: string): SFCDescriptor | undefined {
   return prevCache.get(filename)
 }
 
-export function invalidateDescriptor(filename: string, hmr = false): void {
-  const _cache = hmr ? hmrCache : cache
-  const prev = _cache.get(filename)
-  _cache.delete(filename)
-  if (prev) {
-    prevCache.set(filename, prev)
-  }
-}
+// export function invalidateDescriptor(filename: string, hmr = false): void {
+//   const _cache = hmr ? hmrCache : cache
+//   const prev = _cache.get(filename)
+//   _cache.delete(filename)
+//   if (prev) {
+//     prevCache.set(filename, prev)
+//   }
+// }
 
 export function getDescriptor(
   filename: string,

@@ -25,7 +25,7 @@ export function resolveCompiler(root: string): typeof _compiler {
 function tryResolveCompiler(root?: string) {
   const docueMeta = tryRequire('docuejs/package.json', root)
   // make sure to check the version is 3+ since 2.7 now also has docuejs/compiler-sfc
-  if (docueMeta && docueMeta.version.split('.')[0] >= 3) {
+  if (docueMeta && docueMeta.version.split('.')[0] >= 0) {
     return tryRequire('docuejs/compiler-sfc', root)
   }
 }

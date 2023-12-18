@@ -1,15 +1,15 @@
 import { describe, expect, test } from 'vitest'
 import { version } from 'docuejs'
 import {
-  //   browserLogs,
-  //   editFile,
-  //   getBg,
-  //   getColor,
-  //   isBuild,
+  //   //   browserLogs,
+  //   //   editFile,
+  //   //   getBg,
+  //   //   getColor,
+  //   //   isBuild,
   page,
-  //   serverLogs,
-  //   untilUpdated,
-} from '~utils'
+  //   //   serverLogs,
+  //   //   untilUpdated,
+} from '../../test-utils'
 
 test('should render', async () => {
   expect(await page.textContent('h1')).toMatch(`Docue version ${version}`)
