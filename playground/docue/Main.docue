@@ -12,6 +12,26 @@
   <Syntax />
   <PreProcessors />
   <PreProcessorsHmr />
+  <CssModules />
+  <Assets />
+  <CustomBlock />
+  <SrcImport />
+  <Slotted>
+    <div class="slotted">this should be red</div>
+  </Slotted>
+  <ScanDep />
+  <TsImport />
+  <Suspense>
+    <AsyncComponent />
+  </Suspense>
+  <SetupImportTemplate />
+  <WorkerTest />
+  <Url />
+  <TsGeneric msg="hello" />
+  <DefaultLangs />
+  <PreCompiled />
+  <PreCompiledExternalScoped />
+  <PreCompiledExternalCssModules />
 </template>
 
 <script setup lang="ts">
@@ -22,6 +42,31 @@ import TypeProps from './TypeProps.docue'
 import Syntax from './Syntax.docue'
 import PreProcessors from './PreProcessors.docue'
 import PreProcessorsHmr from './PreProcessorsHmr.docue'
+import CssModules from './CssModules.docue'
+import Assets from './Assets.docue'
+import CustomBlock from './CustomBlock.docue'
+import SrcImport from './src-import/SrcImport.docue'
+import Slotted from './Slotted.docue'
+import ScanDep from './ScanDep.docue'
+import TsImport from './TsImport.docue'
+import AsyncComponent from './AsyncComponent.docue'
+import SetupImportTemplate from './setup-import-template/SetupImportTemplate.docue'
+import WorkerTest from './worker.docue'
+import Url from './Url.docue'
+import DefaultLangs from './DefaultLangs.docue'
+import PreCompiled from './pre-compiled/foo.docue'
+import PreCompiledExternalScoped from './pre-compiled/external-scoped.docue'
+import PreCompiledExternalCssModules from './pre-compiled/external-cssmodules.docue'
+
+const TsGeneric = defineAsyncComponent(() => import('./TsGeneric.docue'))
+
 
 const time = ref('loading...')
+
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    const [entry] = performance.getEntriesByType('navigation')
+    time.value = `loaded in ${entry.duration.toFixed(2)}ms.`
+  }, 0)
+})
 </script>

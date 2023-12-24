@@ -143,83 +143,83 @@ export async function transformMain(
     !ssr &&
     !isProduction
   ) {
-    //     output.push(`_sfc_main.__hmrId = ${JSON.stringify(descriptor.id)}`)
-    //     output.push(
-    //       `typeof __DOCUE_HMR_RUNTIME__ !== 'undefined' && ` +
-    //         `__DOCUE_HMR_RUNTIME__.createRecord(_sfc_main.__hmrId, _sfc_main)`,
-    //     )
-    //     // check if the template is the only thing that changed
-    //     if (prevDescriptor && isOnlyTemplateChanged(prevDescriptor, descriptor)) {
-    //       output.push(`export const _rerender_only = true`)
-    //     }
-    //     output.push(
-    //       `import.meta.hot.accept(mod => {`,
-    //       `  if (!mod) return`,
-    //       `  const { default: updated, _rerender_only } = mod`,
-    //       `  if (_rerender_only) {`,
-    //       `    __DOCUE_HMR_RUNTIME__.rerender(updated.__hmrId, updated.render)`,
-    //       `  } else {`,
-    //       `    __DOCUE_HMR_RUNTIME__.reload(updated.__hmrId, updated)`,
-    //       `  }`,
-    //       `})`,
-    //     )
+    output.push(`_sfc_main.__hmrId = ${JSON.stringify(descriptor.id)}`)
+    output.push(
+      `typeof __DOCUE_HMR_RUNTIME__ !== 'undefined' && ` +
+        `__DOCUE_HMR_RUNTIME__.createRecord(_sfc_main.__hmrId, _sfc_main)`,
+    )
+    // check if the template is the only thing that changed
+    if (prevDescriptor && isOnlyTemplateChanged(prevDescriptor, descriptor)) {
+      output.push(`export const _rerender_only = true`)
+    }
+    output.push(
+      `import.meta.hot.accept(mod => {`,
+      `  if (!mod) return`,
+      `  const { default: updated, _rerender_only } = mod`,
+      `  if (_rerender_only) {`,
+      `    __DOCUE_HMR_RUNTIME__.rerender(updated.__hmrId, updated.render)`,
+      `  } else {`,
+      `    __DOCUE_HMR_RUNTIME__.reload(updated.__hmrId, updated)`,
+      `  }`,
+      `})`,
+    )
   }
 
   // SSR module registration by wrapping user setup
   if (ssr) {
-    //     const normalizedFilename = normalizePath(
-    //       path.relative(options.root, filename),
-    //     )
-    //     output.push(
-    //       `import { useSSRContext as __vite_useSSRContext } from 'docue'`,
-    //       `const _sfc_setup = _sfc_main.setup`,
-    //       `_sfc_main.setup = (props, ctx) => {`,
-    //       `  const ssrContext = __vite_useSSRContext()`,
-    //       `  ;(ssrContext.modules || (ssrContext.modules = new Set())).add(${JSON.stringify(
-    //         normalizedFilename,
-    //       )})`,
-    //       `  return _sfc_setup ? _sfc_setup(props, ctx) : undefined`,
-    //       `}`,
-    //     )
+    const normalizedFilename = normalizePath(
+      path.relative(options.root, filename),
+    )
+    output.push(
+      `import { useSSRContext as __vite_useSSRContext } from 'docuejs'`,
+      `const _sfc_setup = _sfc_main.setup`,
+      `_sfc_main.setup = (props, ctx) => {`,
+      `  const ssrContext = __vite_useSSRContext()`,
+      `  ;(ssrContext.modules || (ssrContext.modules = new Set())).add(${JSON.stringify(
+        normalizedFilename,
+      )})`,
+      `  return _sfc_setup ? _sfc_setup(props, ctx) : undefined`,
+      `}`,
+    )
   }
 
   let resolvedMap: RawSourceMap | undefined = undefined
   if (options.sourceMap) {
     if (scriptMap && templateMap) {
-      //       // if the template is inlined into the main module (indicated by the presence
-      //       // of templateMap), we need to concatenate the two source maps.
-      //       const gen = fromMap(
-      //         // version property of result.map is declared as string
-      //         // but actually it is `3`
-      //         scriptMap as Omit<RawSourceMap, 'version'> as TraceEncodedSourceMap,
-      //       )
-      //       const tracer = new TraceMap(
-      //         // same above
-      //         templateMap as Omit<RawSourceMap, 'version'> as TraceEncodedSourceMap,
-      //       )
-      //       const offset = (scriptCode.match(/\r?\n/g)?.length ?? 0) + 1
-      //       eachMapping(tracer, (m) => {
-      //         if (m.source == null) return
-      //         addMapping(gen, {
-      //           source: m.source,
-      //           original: { line: m.originalLine, column: m.originalColumn },
-      //           generated: {
-      //             line: m.generatedLine + offset,
-      //             column: m.generatedColumn,
-      //           },
-      //         })
-      //       })
-      //       // same above
-      //       resolvedMap = toEncodedMap(gen) as Omit<
-      //         GenEncodedSourceMap,
-      //         'version'
-      //       > as RawSourceMap
-      //       // if this is a template only update, we will be reusing a cached version
-      //       // of the main module compile result, which has outdated sourcesContent.
-      //       resolvedMap.sourcesContent = templateMap.sourcesContent
+      // if the template is inlined into the main module (indicated by the presence
+      // of templateMap), we need to concatenate the two source maps.
+      const gen = fromMap(
+        // version property of result.map is declared as string
+        // but actually it is `3`
+        scriptMap as Omit<RawSourceMap, 'version'> as TraceEncodedSourceMap,
+      )
+      const tracer = new TraceMap(
+        // same above
+        templateMap as Omit<RawSourceMap, 'version'> as TraceEncodedSourceMap,
+      )
+      const offset = (scriptCode.match(/\r?\n/g)?.length ?? 0) + 1
+      eachMapping(tracer, (m) => {
+        if (m.source == null) return
+        addMapping(gen, {
+          source: m.source,
+          original: { line: m.originalLine, column: m.originalColumn },
+          generated: {
+            line: m.generatedLine + offset,
+            column: m.generatedColumn,
+          },
+        })
+      })
+      // same above
+      resolvedMap = toEncodedMap(gen) as Omit<
+        GenEncodedSourceMap,
+        'version'
+      > as RawSourceMap
+      // if this is a template only update, we will be reusing a cached version
+      // of the main module compile result, which has outdated sourcesContent.
+      resolvedMap.sourcesContent = templateMap.sourcesContent
     } else {
-      //       // if one of `scriptMap` and `templateMap` is empty, use the other one
-      //       resolvedMap = scriptMap ?? templateMap
+      // if one of `scriptMap` and `templateMap` is empty, use the other one
+      resolvedMap = scriptMap ?? templateMap
     }
   }
 
@@ -385,68 +385,68 @@ async function genStyleCode(
   let stylesCode = ``
   let cssModulesMap: Record<string, string> | undefined
   if (descriptor.styles.length) {
-    //     for (let i = 0; i < descriptor.styles.length; i++) {
-    //       const style = descriptor.styles[i]
-    //       if (style.src) {
-    //         await linkSrcToDescriptor(
-    //           style.src,
-    //           descriptor,
-    //           pluginContext,
-    //           style.scoped,
-    //         )
-    //       }
-    //       const src = style.src || descriptor.filename
-    //       // do not include module in default query, since we use it to indicate
-    //       // that the module needs to export the modules json
-    //       const attrsQuery = attrsToQuery(style.attrs, 'css')
-    //       const srcQuery = style.src
-    //         ? style.scoped
-    //           ? `&src=${descriptor.id}`
-    //           : '&src=true'
-    //         : ''
-    //       const directQuery = customElement ? `&inline` : ``
-    //       const scopedQuery = style.scoped ? `&scoped=${descriptor.id}` : ``
-    //       const query = `?docue&type=style&index=${i}${srcQuery}${directQuery}${scopedQuery}`
-    //       const styleRequest = src + query + attrsQuery
-    //       if (style.module) {
-    //         if (customElement) {
-    //           throw new Error(
-    //             `<style module> is not supported in custom elements mode.`,
-    //           )
-    //         }
-    //         const [importCode, nameMap] = genCSSModulesCode(
-    //           i,
-    //           styleRequest,
-    //           style.module,
-    //         )
-    //         stylesCode += importCode
-    //         Object.assign((cssModulesMap ||= {}), nameMap)
-    //       } else {
-    //         if (customElement) {
-    //           stylesCode += `\nimport _style_${i} from ${JSON.stringify(
-    //             styleRequest,
-    //           )}`
-    //         } else {
-    //           stylesCode += `\nimport ${JSON.stringify(styleRequest)}`
-    //         }
-    //       }
-    //       // TODO SSR critical CSS collection
-    //     }
-    //     if (customElement) {
-    //       attachedProps.push([
-    //         `styles`,
-    //         `[${descriptor.styles.map((_, i) => `_style_${i}`).join(',')}]`,
-    //       ])
-    //     }
+    for (let i = 0; i < descriptor.styles.length; i++) {
+      const style = descriptor.styles[i]
+      if (style.src) {
+        await linkSrcToDescriptor(
+          style.src,
+          descriptor,
+          pluginContext,
+          style.scoped,
+        )
+      }
+      const src = style.src || descriptor.filename
+      // do not include module in default query, since we use it to indicate
+      // that the module needs to export the modules json
+      const attrsQuery = attrsToQuery(style.attrs, 'css')
+      const srcQuery = style.src
+        ? style.scoped
+          ? `&src=${descriptor.id}`
+          : '&src=true'
+        : ''
+      const directQuery = customElement ? `&inline` : ``
+      const scopedQuery = style.scoped ? `&scoped=${descriptor.id}` : ``
+      const query = `?docue&type=style&index=${i}${srcQuery}${directQuery}${scopedQuery}`
+      const styleRequest = src + query + attrsQuery
+      if (style.module) {
+        if (customElement) {
+          throw new Error(
+            `<style module> is not supported in custom elements mode.`,
+          )
+        }
+        const [importCode, nameMap] = genCSSModulesCode(
+          i,
+          styleRequest,
+          style.module,
+        )
+        stylesCode += importCode
+        Object.assign((cssModulesMap ||= {}), nameMap)
+      } else {
+        if (customElement) {
+          stylesCode += `\nimport _style_${i} from ${JSON.stringify(
+            styleRequest,
+          )}`
+        } else {
+          stylesCode += `\nimport ${JSON.stringify(styleRequest)}`
+        }
+      }
+      // TODO SSR critical CSS collection
+    }
+    if (customElement) {
+      attachedProps.push([
+        `styles`,
+        `[${descriptor.styles.map((_, i) => `_style_${i}`).join(',')}]`,
+      ])
+    }
   }
   if (cssModulesMap) {
-    //     const mappingCode =
-    //       Object.entries(cssModulesMap).reduce(
-    //         (code, [key, value]) => code + `"${key}":${value},\n`,
-    //         '{\n',
-    //       ) + '}'
-    //     stylesCode += `\nconst cssModules = ${mappingCode}`
-    //     attachedProps.push([`__cssModules`, `cssModules`])
+    const mappingCode =
+      Object.entries(cssModulesMap).reduce(
+        (code, [key, value]) => code + `"${key}":${value},\n`,
+        '{\n',
+      ) + '}'
+    stylesCode += `\nconst cssModules = ${mappingCode}`
+    attachedProps.push([`__cssModules`, `cssModules`])
   }
   return stylesCode
 }
@@ -472,17 +472,17 @@ async function genCustomBlockCode(
 ) {
   let code = ''
   for (let index = 0; index < descriptor.customBlocks.length; index++) {
-    //     const block = descriptor.customBlocks[index]
-    //     if (block.src) {
-    //       await linkSrcToDescriptor(block.src, descriptor, pluginContext, false)
-    //     }
-    //     const src = block.src || descriptor.filename
-    //     const attrsQuery = attrsToQuery(block.attrs, block.type)
-    //     const srcQuery = block.src ? `&src=true` : ``
-    //     const query = `?docue&type=${block.type}&index=${index}${srcQuery}${attrsQuery}`
-    //     const request = JSON.stringify(src + query)
-    //     code += `import block${index} from ${request}\n`
-    //     code += `if (typeof block${index} === 'function') block${index}(_sfc_main)\n`
+    const block = descriptor.customBlocks[index]
+    if (block.src) {
+      await linkSrcToDescriptor(block.src, descriptor, pluginContext, false)
+    }
+    const src = block.src || descriptor.filename
+    const attrsQuery = attrsToQuery(block.attrs, block.type)
+    const srcQuery = block.src ? `&src=true` : ``
+    const query = `?docue&type=${block.type}&index=${index}${srcQuery}${attrsQuery}`
+    const request = JSON.stringify(src + query)
+    code += `import block${index} from ${request}\n`
+    code += `if (typeof block${index} === 'function') block${index}(_sfc_main)\n`
   }
   return code
 }

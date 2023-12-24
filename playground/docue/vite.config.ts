@@ -1,6 +1,6 @@
 import { defineConfig, splitVendorChunkPlugin } from 'vite'
 import docuePlugin from 'vite-plugin-docue'
-// import { vueI18nPlugin } from './CustomBlockPlugin'
+import { docueI18nPlugin } from './CustomBlockPlugin'
 
 export default defineConfig({
   resolve: {
@@ -9,9 +9,8 @@ export default defineConfig({
       '@': __dirname,
     },
   },
-  plugins: [docuePlugin()],
   // plugins: [docuePlugin(), splitVendorChunkPlugin()],
-  // plugins: [vuePlugin(), splitVendorChunkPlugin(), vueI18nPlugin],
+  plugins: [docuePlugin(), splitVendorChunkPlugin(), docueI18nPlugin],
   build: {
     // to make tests faster
     minify: false,

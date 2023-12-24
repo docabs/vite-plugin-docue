@@ -1,0 +1,21 @@
+import type { Plugin } from 'vite'
+
+export const docueI18nPlugin: Plugin = {
+  name: 'docue-i18n',
+  async transform(code, id) {
+    if (!/docue&type=i18n/.test(id)) {
+      return
+    }
+
+    if (/\.ya?ml$/.test(id)) {
+      const { load } = await import('js-yaml')
+      code = JSON.stringify(load(code.trim()))
+    }
+    return {
+      code: `export default Comp => {
+      Comp.i18n = ${code}
+    }`,
+      map: { mappings: '' },
+    }
+  },
+}
