@@ -1,14 +1,14 @@
 import { describe, expect, test } from 'vitest'
 import { version } from 'docuejs'
 import {
-  //   //   browserLogs,
-  //   //   editFile,
-  //   //   getBg,
-  //   //   getColor,
-  //   //   isBuild,
+  //   browserLogs,
+  //   editFile,
+  //   getBg,
+  //   getColor,
+  //   isBuild,
   page,
-  //   //   serverLogs,
-  //   //   untilUpdated,
+  //   serverLogs,
+  //   untilUpdated,
 } from '../../test-utils'
 
 test('should render', async () => {

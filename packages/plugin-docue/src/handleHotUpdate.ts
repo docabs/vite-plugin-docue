@@ -1,178 +1,178 @@
-// import _debug from 'debug'
+import _debug from 'debug'
 import type { SFCBlock, SFCDescriptor } from 'docuejs/compiler-sfc'
-// import type { HmrContext, ModuleNode } from 'vite'
-// import { isCSSRequest } from 'vite'
+import type { HmrContext, ModuleNode } from 'vite'
+import { isCSSRequest } from 'vite'
 
-// // eslint-disable-next-line node/no-extraneous-import
-// import type * as t from '@babel/types'
+// eslint-disable-next-line node/no-extraneous-import
+import type * as t from '@babel/types'
 
-// import {
-//   cache,
-//   createDescriptor,
-//   getDescriptor,
-//   invalidateDescriptor,
-// } from './utils/descriptorCache'
-// import {
-//   getResolvedScript,
-//   invalidateScript,
-//   resolveScript,
-//   setResolvedScript,
-// } from './script'
-// import type { ResolvedOptions } from '.'
+import {
+  cache,
+  createDescriptor,
+  getDescriptor,
+  invalidateDescriptor,
+} from './utils/descriptorCache'
+import {
+  getResolvedScript,
+  invalidateScript,
+  resolveScript,
+  setResolvedScript,
+} from './script'
+import type { ResolvedOptions } from '.'
 
-// const debug = _debug('vite:hmr')
+const debug = _debug('vite:hmr')
 
-// const directRequestRE = /(?:\?|&)direct\b/
+const directRequestRE = /(?:\?|&)direct\b/
 
-// /**
-//  * Vite-specific HMR handling
-//  */
-// export async function handleHotUpdate(
-//   { file, modules, read }: HmrContext,
-//   options: ResolvedOptions,
-// ): Promise<ModuleNode[] | void> {
-//   const prevDescriptor = getDescriptor(file, options, false, true)
-//   if (!prevDescriptor) {
-//     // file hasn't been requested yet (e.g. async component)
-//     return
-//   }
+/**
+ * Vite-specific HMR handling
+ */
+export async function handleHotUpdate(
+  { file, modules, read }: HmrContext,
+  options: ResolvedOptions,
+): Promise<ModuleNode[] | void> {
+  const prevDescriptor = getDescriptor(file, options, false, true)
+  if (!prevDescriptor) {
+    // file hasn't been requested yet (e.g. async component)
+    return
+  }
 
-//   const content = await read()
-//   const { descriptor } = createDescriptor(file, content, options, true)
+  const content = await read()
+  const { descriptor } = createDescriptor(file, content, options, true)
 
-//   let needRerender = false
-//   const affectedModules = new Set<ModuleNode | undefined>()
-//   const mainModule = getMainModule(modules)
-//   const templateModule = modules.find((m) => /type=template/.test(m.url))
+  //   let needRerender = false
+  //   const affectedModules = new Set<ModuleNode | undefined>()
+  //   const mainModule = getMainModule(modules)
+  //   const templateModule = modules.find((m) => /type=template/.test(m.url))
 
-//   // trigger resolveScript for descriptor so that we'll have the AST ready
-//   resolveScript(descriptor, options, false)
-//   const scriptChanged = hasScriptChanged(prevDescriptor, descriptor)
-//   if (scriptChanged) {
-//     affectedModules.add(getScriptModule(modules) || mainModule)
-//   }
+  //   // trigger resolveScript for descriptor so that we'll have the AST ready
+  //   resolveScript(descriptor, options, false)
+  //   const scriptChanged = hasScriptChanged(prevDescriptor, descriptor)
+  //   if (scriptChanged) {
+  //     affectedModules.add(getScriptModule(modules) || mainModule)
+  //   }
 
-//   if (!isEqualBlock(descriptor.template, prevDescriptor.template)) {
-//     // when a <script setup> component's template changes, it will need correct
-//     // binding metadata. However, when reloading the template alone the binding
-//     // metadata will not be available since the script part isn't loaded.
-//     // in this case, reuse the compiled script from previous descriptor.
-//     if (!scriptChanged) {
-//       setResolvedScript(
-//         descriptor,
-//         getResolvedScript(prevDescriptor, false)!,
-//         false,
-//       )
-//     }
-//     affectedModules.add(templateModule)
-//     needRerender = true
-//   }
+  //   if (!isEqualBlock(descriptor.template, prevDescriptor.template)) {
+  //     // when a <script setup> component's template changes, it will need correct
+  //     // binding metadata. However, when reloading the template alone the binding
+  //     // metadata will not be available since the script part isn't loaded.
+  //     // in this case, reuse the compiled script from previous descriptor.
+  //     if (!scriptChanged) {
+  //       setResolvedScript(
+  //         descriptor,
+  //         getResolvedScript(prevDescriptor, false)!,
+  //         false,
+  //       )
+  //     }
+  //     affectedModules.add(templateModule)
+  //     needRerender = true
+  //   }
 
-//   let didUpdateStyle = false
-//   const prevStyles = prevDescriptor.styles || []
-//   const nextStyles = descriptor.styles || []
+  //   let didUpdateStyle = false
+  //   const prevStyles = prevDescriptor.styles || []
+  //   const nextStyles = descriptor.styles || []
 
-//   // force reload if CSS vars injection changed
-//   if (prevDescriptor.cssVars.join('') !== descriptor.cssVars.join('')) {
-//     affectedModules.add(mainModule)
-//   }
+  //   // force reload if CSS vars injection changed
+  //   if (prevDescriptor.cssVars.join('') !== descriptor.cssVars.join('')) {
+  //     affectedModules.add(mainModule)
+  //   }
 
-//   // force reload if scoped status has changed
-//   if (prevStyles.some((s) => s.scoped) !== nextStyles.some((s) => s.scoped)) {
-//     // template needs to be invalidated as well
-//     affectedModules.add(templateModule)
-//     affectedModules.add(mainModule)
-//   }
+  //   // force reload if scoped status has changed
+  //   if (prevStyles.some((s) => s.scoped) !== nextStyles.some((s) => s.scoped)) {
+  //     // template needs to be invalidated as well
+  //     affectedModules.add(templateModule)
+  //     affectedModules.add(mainModule)
+  //   }
 
-//   // only need to update styles if not reloading, since reload forces
-//   // style updates as well.
-//   for (let i = 0; i < nextStyles.length; i++) {
-//     const prev = prevStyles[i]
-//     const next = nextStyles[i]
-//     if (!prev || !isEqualBlock(prev, next)) {
-//       didUpdateStyle = true
-//       const mod = modules.find(
-//         (m) =>
-//           m.url.includes(`type=style&index=${i}`) &&
-//           m.url.endsWith(`.${next.lang || 'css'}`) &&
-//           !directRequestRE.test(m.url),
-//       )
-//       if (mod) {
-//         affectedModules.add(mod)
-//         if (mod.url.includes('&inline')) {
-//           affectedModules.add(mainModule)
-//         }
-//       } else {
-//         // new style block - force reload
-//         affectedModules.add(mainModule)
-//       }
-//     }
-//   }
-//   if (prevStyles.length > nextStyles.length) {
-//     // style block removed - force reload
-//     affectedModules.add(mainModule)
-//   }
+  //   // only need to update styles if not reloading, since reload forces
+  //   // style updates as well.
+  //   for (let i = 0; i < nextStyles.length; i++) {
+  //     const prev = prevStyles[i]
+  //     const next = nextStyles[i]
+  //     if (!prev || !isEqualBlock(prev, next)) {
+  //       didUpdateStyle = true
+  //       const mod = modules.find(
+  //         (m) =>
+  //           m.url.includes(`type=style&index=${i}`) &&
+  //           m.url.endsWith(`.${next.lang || 'css'}`) &&
+  //           !directRequestRE.test(m.url),
+  //       )
+  //       if (mod) {
+  //         affectedModules.add(mod)
+  //         if (mod.url.includes('&inline')) {
+  //           affectedModules.add(mainModule)
+  //         }
+  //       } else {
+  //         // new style block - force reload
+  //         affectedModules.add(mainModule)
+  //       }
+  //     }
+  //   }
+  //   if (prevStyles.length > nextStyles.length) {
+  //     // style block removed - force reload
+  //     affectedModules.add(mainModule)
+  //   }
 
-//   const prevCustoms = prevDescriptor.customBlocks || []
-//   const nextCustoms = descriptor.customBlocks || []
+  //   const prevCustoms = prevDescriptor.customBlocks || []
+  //   const nextCustoms = descriptor.customBlocks || []
 
-//   // custom blocks update causes a reload
-//   // because the custom block contents is changed and it may be used in JS.
-//   if (prevCustoms.length !== nextCustoms.length) {
-//     // block removed/added, force reload
-//     affectedModules.add(mainModule)
-//   } else {
-//     for (let i = 0; i < nextCustoms.length; i++) {
-//       const prev = prevCustoms[i]
-//       const next = nextCustoms[i]
-//       if (!prev || !isEqualBlock(prev, next)) {
-//         const mod = modules.find((m) =>
-//           m.url.includes(`type=${prev.type}&index=${i}`),
-//         )
-//         if (mod) {
-//           affectedModules.add(mod)
-//         } else {
-//           affectedModules.add(mainModule)
-//         }
-//       }
-//     }
-//   }
+  //   // custom blocks update causes a reload
+  //   // because the custom block contents is changed and it may be used in JS.
+  //   if (prevCustoms.length !== nextCustoms.length) {
+  //     // block removed/added, force reload
+  //     affectedModules.add(mainModule)
+  //   } else {
+  //     for (let i = 0; i < nextCustoms.length; i++) {
+  //       const prev = prevCustoms[i]
+  //       const next = nextCustoms[i]
+  //       if (!prev || !isEqualBlock(prev, next)) {
+  //         const mod = modules.find((m) =>
+  //           m.url.includes(`type=${prev.type}&index=${i}`),
+  //         )
+  //         if (mod) {
+  //           affectedModules.add(mod)
+  //         } else {
+  //           affectedModules.add(mainModule)
+  //         }
+  //       }
+  //     }
+  //   }
 
-//   const updateType = []
-//   if (needRerender) {
-//     updateType.push(`template`)
-//     // template is inlined into main, add main module instead
-//     if (!templateModule) {
-//       affectedModules.add(mainModule)
-//     } else if (mainModule && !affectedModules.has(mainModule)) {
-//       const styleImporters = [...mainModule.importers].filter((m) =>
-//         isCSSRequest(m.url),
-//       )
-//       styleImporters.forEach((m) => affectedModules.add(m))
-//     }
-//   }
-//   if (didUpdateStyle) {
-//     updateType.push(`style`)
-//   }
-//   if (updateType.length) {
-//     if (file.endsWith('.docue')) {
-//       // invalidate the descriptor cache so that the next transform will
-//       // re-analyze the file and pick up the changes.
-//       invalidateDescriptor(file)
-//     } else {
-//       // https://github.com/docuejs/vitepress/issues/3129
-//       // For non-docue files, e.g. .md files in VitePress, invalidating the
-//       // descriptor will cause the main `load()` hook to attempt to read and
-//       // parse a descriptor from a non-docue source file, leading to errors.
-//       // To fix that we need to provide the descriptor we parsed here in the
-//       // main cache. This assumes no other plugin is applying pre-transform to
-//       // the file type - not impossible, but should be extremely unlikely.
-//       cache.set(file, descriptor)
-//     }
-//     debug(`[docue:update(${updateType.join('&')})] ${file}`)
-//   }
-//   return [...affectedModules].filter(Boolean) as ModuleNode[]
-// }
+  //   const updateType = []
+  //   if (needRerender) {
+  //     updateType.push(`template`)
+  //     // template is inlined into main, add main module instead
+  //     if (!templateModule) {
+  //       affectedModules.add(mainModule)
+  //     } else if (mainModule && !affectedModules.has(mainModule)) {
+  //       const styleImporters = [...mainModule.importers].filter((m) =>
+  //         isCSSRequest(m.url),
+  //       )
+  //       styleImporters.forEach((m) => affectedModules.add(m))
+  //     }
+  //   }
+  //   if (didUpdateStyle) {
+  //     updateType.push(`style`)
+  //   }
+  //   if (updateType.length) {
+  //     if (file.endsWith('.docue')) {
+  //       // invalidate the descriptor cache so that the next transform will
+  //       // re-analyze the file and pick up the changes.
+  //       invalidateDescriptor(file)
+  //     } else {
+  //       // https://github.com/docuejs/vitepress/issues/3129
+  //       // For non-docue files, e.g. .md files in VitePress, invalidating the
+  //       // descriptor will cause the main `load()` hook to attempt to read and
+  //       // parse a descriptor from a non-docue source file, leading to errors.
+  //       // To fix that we need to provide the descriptor we parsed here in the
+  //       // main cache. This assumes no other plugin is applying pre-transform to
+  //       // the file type - not impossible, but should be extremely unlikely.
+  //       cache.set(file, descriptor)
+  //     }
+  //     debug(`[docue:update(${updateType.join('&')})] ${file}`)
+  //   }
+  //   return [...affectedModules].filter(Boolean) as ModuleNode[]
+}
 
 export function isEqualBlock(a: SFCBlock | null, b: SFCBlock | null): boolean {
   if (!a && !b) return true
@@ -201,41 +201,41 @@ export function isOnlyTemplateChanged(
   )
 }
 
-// function deepEqual(obj1: any, obj2: any, excludeProps: string[] = []): boolean {
-//   // Check if both objects are of the same type
-//   if (typeof obj1 !== typeof obj2) {
-//     return false
-//   }
+function deepEqual(obj1: any, obj2: any, excludeProps: string[] = []): boolean {
+  // Check if both objects are of the same type
+  if (typeof obj1 !== typeof obj2) {
+    return false
+  }
 
-//   // Check if both objects are primitive types or null
-//   if (obj1 == null || obj2 == null || typeof obj1 !== 'object') {
-//     return obj1 === obj2
-//   }
+  // Check if both objects are primitive types or null
+  if (obj1 == null || obj2 == null || typeof obj1 !== 'object') {
+    return obj1 === obj2
+  }
 
-//   // Get the keys of the objects
-//   const keys1 = Object.keys(obj1)
-//   const keys2 = Object.keys(obj2)
+  // Get the keys of the objects
+  const keys1 = Object.keys(obj1)
+  const keys2 = Object.keys(obj2)
 
-//   // Check if the number of keys is the same
-//   if (keys1.length !== keys2.length) {
-//     return false
-//   }
+  // Check if the number of keys is the same
+  if (keys1.length !== keys2.length) {
+    return false
+  }
 
-//   // Iterate through the keys and recursively compare the values
-//   for (const key of keys1) {
-//     // Check if the current key should be excluded
-//     if (excludeProps.includes(key)) {
-//       continue
-//     }
+  // Iterate through the keys and recursively compare the values
+  for (const key of keys1) {
+    // Check if the current key should be excluded
+    if (excludeProps.includes(key)) {
+      continue
+    }
 
-//     if (!deepEqual(obj1[key], obj2[key], excludeProps)) {
-//       return false
-//     }
-//   }
+    if (!deepEqual(obj1[key], obj2[key], excludeProps)) {
+      return false
+    }
+  }
 
-//   // If all comparisons passed, the objects are deep equal
-//   return true
-// }
+  // If all comparisons passed, the objects are deep equal
+  return true
+}
 
 // function isEqualAst(prev?: t.Statement[], next?: t.Statement[]): boolean {
 //   if (typeof prev === 'undefined' || typeof next === 'undefined') {
@@ -318,18 +318,18 @@ function hasScriptChanged(prev: SFCDescriptor, next: SFCDescriptor): boolean {
 //   return modules.find((m) => /type=script.*&lang\.\w+$/.test(m.url))
 // }
 
-// export function handleTypeDepChange(
-//   affectedComponents: Set<string>,
-//   { modules, server: { moduleGraph } }: HmrContext,
-// ): ModuleNode[] {
-//   const affected = new Set<ModuleNode>()
-//   for (const file of affectedComponents) {
-//     invalidateScript(file)
-//     const mods = moduleGraph.getModulesByFile(file)
-//     if (mods) {
-//       const arr = [...mods]
-//       affected.add(getScriptModule(arr) || getMainModule(arr))
-//     }
-//   }
-//   return [...modules, ...affected]
-// }
+export function handleTypeDepChange(
+  affectedComponents: Set<string>,
+  { modules, server: { moduleGraph } }: HmrContext,
+): ModuleNode[] {
+  const affected = new Set<ModuleNode>()
+  //   for (const file of affectedComponents) {
+  //     invalidateScript(file)
+  //     const mods = moduleGraph.getModulesByFile(file)
+  //     if (mods) {
+  //       const arr = [...mods]
+  //       affected.add(getScriptModule(arr) || getMainModule(arr))
+  //     }
+  //   }
+  return [...modules, ...affected]
+}

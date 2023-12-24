@@ -17,7 +17,7 @@
   "dependencies": {
     "@vitejs/test-example-external-component": "file:example-external-component",
     "diniajs": "^0.0",
-    "docuejs": "^0.0",
+    "docuejs": "^0.0.4",
     "docue-router": "^0.0"
   },
   "devDependencies": {

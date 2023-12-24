@@ -42,8 +42,8 @@ importers:
         specifier: ^4.1.0
         version: 4.1.0
       docuejs:
-        specifier: ^0.0
-        version: 0.0.3(typescript@5.3.3)
+        specifier: ^0.0.4
+        version: 0.0.4(typescript@5.3.3)
       eslint:
         specifier: ^8.55.0
         version: 8.56.0
@@ -123,8 +123,8 @@ importers:
         specifier: ^4.3.4
         version: 4.3.4
       docuejs:
-        specifier: ^0.0
-        version: 0.0.3(typescript@5.3.3)
+        specifier: ^0.0.4
+        version: 0.0.4(typescript@5.3.3)
       rollup:
         specifier: ^4.6.1
         version: 4.9.0
@@ -175,8 +175,8 @@ importers:
   playground/docue:
     dependencies:
       docuejs:
-        specifier: ^0.0
-        version: 0.0.3(typescript@5.3.3)
+        specifier: ^0.0.4
+        version: 0.0.4(typescript@5.3.3)
       lodash-es:
         specifier: ^4.17.21
         version: 4.17.21
@@ -207,13 +207,13 @@ importers:
         version: file:playground/ssr-docue/example-external-component
       diniajs:
         specifier: ^0.0
-        version: 0.0.6(docuejs@0.0.3)(typescript@5.3.3)
+        version: 0.0.6(docuejs@0.0.4)(typescript@5.3.3)
       docue-router:
         specifier: ^0.0
-        version: 0.0.3(docuejs@0.0.3)
+        version: 0.0.3(docuejs@0.0.4)
       docuejs:
-        specifier: ^0.0
-        version: 0.0.3(typescript@5.3.3)
+        specifier: ^0.0.4
+        version: 0.0.4(typescript@5.3.3)
     devDependencies:
       '@vitejs/test-dep-import-type':
         specifier: link:dep-import-type
@@ -516,68 +516,68 @@ packages:
       '@babel/helper-validator-identifier': 7.22.20
       to-fast-properties: 2.0.0
 
-  /@docue/compiler-core@0.0.3:
-    resolution: {integrity: sha512-KcFh/qsFkUyfDUcKiSV9hBQh/VDQI5N7cbF2GV38IilQDYkqLRk8/bDgLJSwaFt3DBQCP6cil7LRQ4Wum5TtKg==}
+  /@docue/compiler-core@0.0.4:
+    resolution: {integrity: sha512-EA4NV98GqheGbAVLQulDft6+wN5eAICQuHcNetcVuMiUvqeiVu68CH6Wka5SpGI6JegiCHZcq5gHnYsGJIUFCw==}
     dependencies:
       '@babel/parser': 7.23.6
-      '@docue/shared': 0.0.3
+      '@docue/shared': 0.0.4
       estree-walker: 2.0.2
       source-map-js: 1.0.2
 
-  /@docue/compiler-dom@0.0.3:
-    resolution: {integrity: sha512-s0BR+9VFfrlqjVZmo0cymV4uyGu4hcX1BqwfIeMjz2EBIVSiFSZtED1dofHjrRHtT4kqzoLZHIEcvGYLBIMc1A==}
+  /@docue/compiler-dom@0.0.4:
+    resolution: {integrity: sha512-dGlsmG72DWniCGto++MOazN92ijCFGt1FHYIo5Q9dKs7JIZNytQ3vZP49qOsGq7ido3wMHKt3ENKmHwAh7kbrg==}
     dependencies:
-      '@docue/compiler-core': 0.0.3
-      '@docue/shared': 0.0.3
+      '@docue/compiler-core': 0.0.4
+      '@docue/shared': 0.0.4
 
-  /@docue/compiler-sfc@0.0.3:
-    resolution: {integrity: sha512-zCrfXfD/MyKSWQ0ZvmvUCe0Qg8Vwg7XDtzwz6reCN/1//gl5ReTWxy1dmZCKLKgxnZrHNgFWB4ANdHJbtP/83A==}
+  /@docue/compiler-sfc@0.0.4:
+    resolution: {integrity: sha512-FrDz+yz0cp8pmKND7keS8Dp8vcUdFFzvANLvLAvqikQKnQGgWXWDUtXbQnc2+U4FdotkAmBF2YA1fhuM2MXTpA==}
     dependencies:
       '@babel/parser': 7.23.6
-      '@docue/compiler-core': 0.0.3
-      '@docue/compiler-dom': 0.0.3
-      '@docue/compiler-ssr': 0.0.3
-      '@docue/shared': 0.0.3
+      '@docue/compiler-core': 0.0.4
+      '@docue/compiler-dom': 0.0.4
+      '@docue/compiler-ssr': 0.0.4
+      '@docue/shared': 0.0.4
       estree-walker: 2.0.2
       magic-string: 0.30.5
       postcss: 8.4.32
       source-map-js: 1.0.2
 
-  /@docue/compiler-ssr@0.0.3:
-    resolution: {integrity: sha512-sI3cIweWH1laCPw3RaUUU+3YmbPY1NUm7EJduuF9InQg0LBWINfDD2AIAT8MDv+iHaYBgfxrH171aPxaXv+R+Q==}
+  /@docue/compiler-ssr@0.0.4:
+    resolution: {integrity: sha512-2G+mo08KxlOoTun+RSqc7//qrghnvYGgNfHyrpXEvM5nrwuVZTAtVh0Hfd3UhBtIxm/GJeWDtdjMI/a50l1LMA==}
     dependencies:
-      '@docue/compiler-dom': 0.0.3
-      '@docue/shared': 0.0.3
+      '@docue/compiler-dom': 0.0.4
+      '@docue/shared': 0.0.4
 
-  /@docue/reactivity@0.0.3:
-    resolution: {integrity: sha512-ixhauWnJ0FsCpuTFfFSQ2PugBb/YSNszqYcX2N+aHM9mHIk1AwUjOotUAZtfltU7yqa6QbiAI0k9wVWvCrpK6Q==}
+  /@docue/reactivity@0.0.4:
+    resolution: {integrity: sha512-hsT9nLIFW5oMG/1v9IjpyduIwKuHDEKm1pmnE8X/i74OxCNOPAXXZVoXqY9EAq0ALNX1kpQxsjvLpaF6eUXdGQ==}
     dependencies:
-      '@docue/shared': 0.0.3
+      '@docue/shared': 0.0.4
 
-  /@docue/runtime-core@0.0.3:
-    resolution: {integrity: sha512-AxZl6uppDPgqQQPRpORy060JEheX9aoeowuWuvv+UYftj6X+/AA2jqNkRgfqwI5Ve6dgB87yEBDE2iOdiMJunw==}
+  /@docue/runtime-core@0.0.4:
+    resolution: {integrity: sha512-ReQkOkO9ErIE9kcZkDBwx9uGggW3FIiseOBEertkZkq/mfb/cwKtYVNTBufRUzZ48sF5nraxYLLaMRtNwLeAKQ==}
     dependencies:
-      '@docue/reactivity': 0.0.3
-      '@docue/shared': 0.0.3
+      '@docue/reactivity': 0.0.4
+      '@docue/shared': 0.0.4
 
-  /@docue/runtime-dom@0.0.3:
-    resolution: {integrity: sha512-8b5Zhi+rUt+vJCMzWijraOOQEc9nXIqu8ju9gXLuuCVDwZBb67iX4xW/3KoQvZ5CKnH/3fNAtO/itma/9zoyiw==}
+  /@docue/runtime-dom@0.0.4:
+    resolution: {integrity: sha512-33beFUyKQofSte9a0hx1WOH2XGio0FqfHLd2O5JyfnzhRlVLplSv0v54zG8x0MYz3l+85uR38JW/uMSxIdWCjQ==}
     dependencies:
-      '@docue/runtime-core': 0.0.3
-      '@docue/shared': 0.0.3
+      '@docue/runtime-core': 0.0.4
+      '@docue/shared': 0.0.4
       csstype: 3.1.3
 
-  /@docue/server-renderer@0.0.3(docuejs@0.0.3):
-    resolution: {integrity: sha512-eKse3BRjcitTNh6bNdR1dUr7Nyr4aIjEj/h8GcDuJltO1V09GB5dobYXk/v9KXr21yuTH8oVk/7t118oShAHNw==}
+  /@docue/server-renderer@0.0.4(docuejs@0.0.4):
+    resolution: {integrity: sha512-Pst2GcSbBy1Z6IAHaBntldstTdPN6Bfy0NbYU9jO44ef+20V/53Ux/4RRoGK3DmlFR5A2HE9BIZO7TjcAmuJNg==}
     peerDependencies:
-      docuejs: 0.0.3
+      docuejs: 0.0.4
     dependencies:
-      '@docue/compiler-ssr': 0.0.3
-      '@docue/shared': 0.0.3
-      docuejs: 0.0.3(typescript@5.3.3)
+      '@docue/compiler-ssr': 0.0.4
+      '@docue/shared': 0.0.4
+      docuejs: 0.0.4(typescript@5.3.3)
 
-  /@docue/shared@0.0.3:
-    resolution: {integrity: sha512-dz5TGVgsT87JtnIbBuurUmb9mxhhk0t4JpaaLRsmG8j8j1FKGpGw3hWW0Yd8pG3n7UvrzpzeOKvcbTsO46lSEQ==}
+  /@docue/shared@0.0.4:
+    resolution: {integrity: sha512-QwHwPD6c763fwwF6zAUp6ns0p/oZJLJe7KfooFvQy/jlXnNhjphPP/x1CaZTa39CysAb8831sMOHReRA0vHTCQ==}
 
   /@esbuild/android-arm64@0.18.20:
     resolution: {integrity: sha512-Nz4rJcchGDtENV0eMKUNa6L12zz2zBDXuhj/Vjh18zGqB44Bi7MBMSXjgunJgjRhCmKOjnPuZp4Mb6OKqtMHLQ==}
@@ -2476,7 +2476,7 @@ packages:
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     dev: true
 
-  /diniajs@0.0.6(docuejs@0.0.3)(typescript@5.3.3):
+  /diniajs@0.0.6(docuejs@0.0.4)(typescript@5.3.3):
     resolution: {integrity: sha512-KPFBNJeNict0qMhVZmRQWKb8Vxjrz6ljrF2fNS6OIBIYErws0bJKE993JgFr7W0OdGFwQSJHjltL7Wuxm1Mt6A==}
     peerDependencies:
       docuejs: ^0.0.3
@@ -2485,7 +2485,7 @@ packages:
       typescript:
         optional: true
     dependencies:
-      docuejs: 0.0.3(typescript@5.3.3)
+      docuejs: 0.0.4(typescript@5.3.3)
       typescript: 5.3.3
     dev: false
 
@@ -2514,27 +2514,27 @@ packages:
     resolution: {integrity: sha512-LLBi6pEqS6Do3EKQ3J0NqHWV5hhb78Pi8vvESYwyOy2c31ZEZVdtitdzsQsKb7878PEERhzUk0ftqGhG6Mz+pQ==}
     dev: true
 
-  /docue-router@0.0.3(docuejs@0.0.3):
+  /docue-router@0.0.3(docuejs@0.0.4):
     resolution: {integrity: sha512-9yOysu2n5b26NQzMagxhL9txeCiEXlSqFVQtK3BK7e2ckdkvJZYSAujUk3nICxz1BzRE46vEwVxdCcp2D9s6lA==}
     peerDependencies:
       docuejs: ^0.0
     dependencies:
-      docuejs: 0.0.3(typescript@5.3.3)
+      docuejs: 0.0.4(typescript@5.3.3)
     dev: false
 
-  /docuejs@0.0.3(typescript@5.3.3):
-    resolution: {integrity: sha512-xhhO1jcBom224wwEquc7FufFAPk4yBj8VGeym6Tivzgx82dX0N6Dp3A4yEE59h1xQhD3KTVaAlGI2jheQpXRow==}
+  /docuejs@0.0.4(typescript@5.3.3):
+    resolution: {integrity: sha512-Bham2iLqcf+CkVf2EgDaxWwlkZYFr1+slzZmhVAh4Y3Krz/NPe7O943D7/+wMUg04jtFh+zvj2+8pz8uuIeWxw==}
     peerDependencies:
       typescript: '*'
     peerDependenciesMeta:
       typescript:
         optional: true
     dependencies:
-      '@docue/compiler-dom': 0.0.3
-      '@docue/compiler-sfc': 0.0.3
-      '@docue/runtime-dom': 0.0.3
-      '@docue/server-renderer': 0.0.3(docuejs@0.0.3)
-      '@docue/shared': 0.0.3
+      '@docue/compiler-dom': 0.0.4
+      '@docue/compiler-sfc': 0.0.4
+      '@docue/runtime-dom': 0.0.4
+      '@docue/server-renderer': 0.0.4(docuejs@0.0.4)
+      '@docue/shared': 0.0.4
       typescript: 5.3.3
 
   /dom-serializer@2.0.0:

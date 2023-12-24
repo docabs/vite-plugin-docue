@@ -9,7 +9,8 @@ export default defineConfig({
       '@': __dirname,
     },
   },
-  plugins: [docuePlugin(), splitVendorChunkPlugin()],
+  plugins: [docuePlugin()],
+  // plugins: [docuePlugin(), splitVendorChunkPlugin()],
   // plugins: [vuePlugin(), splitVendorChunkPlugin(), vueI18nPlugin],
   build: {
     // to make tests faster

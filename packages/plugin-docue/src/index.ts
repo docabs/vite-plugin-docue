@@ -21,7 +21,7 @@ import {
 } from './utils/descriptorCache'
 import { getResolvedScript, typeDepToSFCMap } from './script'
 import { transformMain } from './main'
-// import { handleHotUpdate, handleTypeDepChange } from './handleHotUpdate'
+import { handleHotUpdate, handleTypeDepChange } from './handleHotUpdate'
 import { transformTemplateAsModule } from './template'
 import { transformStyle } from './style'
 import { EXPORT_HELPER_ID, helperCode } from './helper'
@@ -129,17 +129,17 @@ export default function docuePlugin(rawOptions: Options = {}): Plugin<Api> {
       version,
     },
 
-    //     handleHotUpdate(ctx) {
-    //       if (options.value.compiler.invalidateTypeCache) {
-    //         options.value.compiler.invalidateTypeCache(ctx.file)
-    //       }
-    //       if (typeDepToSFCMap.has(ctx.file)) {
-    //         return handleTypeDepChange(typeDepToSFCMap.get(ctx.file)!, ctx)
-    //       }
-    //       if (filter.value(ctx.file)) {
-    //         return handleHotUpdate(ctx, options.value)
-    //       }
-    //     },
+    handleHotUpdate(ctx) {
+      if (options.value.compiler.invalidateTypeCache) {
+        options.value.compiler.invalidateTypeCache(ctx.file)
+      }
+      if (typeDepToSFCMap.has(ctx.file)) {
+        return handleTypeDepChange(typeDepToSFCMap.get(ctx.file)!, ctx)
+      }
+      if (filter.value(ctx.file)) {
+        return handleHotUpdate(ctx, options.value)
+      }
+    },
 
     config(config) {
       return {

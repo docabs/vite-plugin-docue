@@ -145,8 +145,8 @@ export async function transformMain(
   ) {
     //     output.push(`_sfc_main.__hmrId = ${JSON.stringify(descriptor.id)}`)
     //     output.push(
-    //       `typeof __VUE_HMR_RUNTIME__ !== 'undefined' && ` +
-    //         `__VUE_HMR_RUNTIME__.createRecord(_sfc_main.__hmrId, _sfc_main)`,
+    //       `typeof __DOCUE_HMR_RUNTIME__ !== 'undefined' && ` +
+    //         `__DOCUE_HMR_RUNTIME__.createRecord(_sfc_main.__hmrId, _sfc_main)`,
     //     )
     //     // check if the template is the only thing that changed
     //     if (prevDescriptor && isOnlyTemplateChanged(prevDescriptor, descriptor)) {
@@ -157,9 +157,9 @@ export async function transformMain(
     //       `  if (!mod) return`,
     //       `  const { default: updated, _rerender_only } = mod`,
     //       `  if (_rerender_only) {`,
-    //       `    __VUE_HMR_RUNTIME__.rerender(updated.__hmrId, updated.render)`,
+    //       `    __DOCUE_HMR_RUNTIME__.rerender(updated.__hmrId, updated.render)`,
     //       `  } else {`,
-    //       `    __VUE_HMR_RUNTIME__.reload(updated.__hmrId, updated)`,
+    //       `    __DOCUE_HMR_RUNTIME__.reload(updated.__hmrId, updated)`,
     //       `  }`,
     //       `})`,
     //     )
@@ -184,80 +184,78 @@ export async function transformMain(
   }
 
   let resolvedMap: RawSourceMap | undefined = undefined
-  //   if (options.sourceMap) {
-  //     if (scriptMap && templateMap) {
-  //       // if the template is inlined into the main module (indicated by the presence
-  //       // of templateMap), we need to concatenate the two source maps.
+  if (options.sourceMap) {
+    if (scriptMap && templateMap) {
+      //       // if the template is inlined into the main module (indicated by the presence
+      //       // of templateMap), we need to concatenate the two source maps.
+      //       const gen = fromMap(
+      //         // version property of result.map is declared as string
+      //         // but actually it is `3`
+      //         scriptMap as Omit<RawSourceMap, 'version'> as TraceEncodedSourceMap,
+      //       )
+      //       const tracer = new TraceMap(
+      //         // same above
+      //         templateMap as Omit<RawSourceMap, 'version'> as TraceEncodedSourceMap,
+      //       )
+      //       const offset = (scriptCode.match(/\r?\n/g)?.length ?? 0) + 1
+      //       eachMapping(tracer, (m) => {
+      //         if (m.source == null) return
+      //         addMapping(gen, {
+      //           source: m.source,
+      //           original: { line: m.originalLine, column: m.originalColumn },
+      //           generated: {
+      //             line: m.generatedLine + offset,
+      //             column: m.generatedColumn,
+      //           },
+      //         })
+      //       })
+      //       // same above
+      //       resolvedMap = toEncodedMap(gen) as Omit<
+      //         GenEncodedSourceMap,
+      //         'version'
+      //       > as RawSourceMap
+      //       // if this is a template only update, we will be reusing a cached version
+      //       // of the main module compile result, which has outdated sourcesContent.
+      //       resolvedMap.sourcesContent = templateMap.sourcesContent
+    } else {
+      //       // if one of `scriptMap` and `templateMap` is empty, use the other one
+      //       resolvedMap = scriptMap ?? templateMap
+    }
+  }
 
-  //       const gen = fromMap(
-  //         // version property of result.map is declared as string
-  //         // but actually it is `3`
-  //         scriptMap as Omit<RawSourceMap, 'version'> as TraceEncodedSourceMap,
-  //       )
-  //       const tracer = new TraceMap(
-  //         // same above
-  //         templateMap as Omit<RawSourceMap, 'version'> as TraceEncodedSourceMap,
-  //       )
-  //       const offset = (scriptCode.match(/\r?\n/g)?.length ?? 0) + 1
-  //       eachMapping(tracer, (m) => {
-  //         if (m.source == null) return
-  //         addMapping(gen, {
-  //           source: m.source,
-  //           original: { line: m.originalLine, column: m.originalColumn },
-  //           generated: {
-  //             line: m.generatedLine + offset,
-  //             column: m.generatedColumn,
-  //           },
-  //         })
-  //       })
-
-  //       // same above
-  //       resolvedMap = toEncodedMap(gen) as Omit<
-  //         GenEncodedSourceMap,
-  //         'version'
-  //       > as RawSourceMap
-  //       // if this is a template only update, we will be reusing a cached version
-  //       // of the main module compile result, which has outdated sourcesContent.
-  //       resolvedMap.sourcesContent = templateMap.sourcesContent
-  //     } else {
-  //       // if one of `scriptMap` and `templateMap` is empty, use the other one
-  //       resolvedMap = scriptMap ?? templateMap
-  //     }
-  //   }
-
-  //   if (!attachedProps.length) {
-  //     output.push(`export default _sfc_main`)
-  //   } else {
-  //     output.push(
-  //       `import _export_sfc from '${EXPORT_HELPER_ID}'`,
-  //       `export default /*#__PURE__*/_export_sfc(_sfc_main, [${attachedProps
-  //         .map(([key, val]) => `['${key}',${val}]`)
-  //         .join(',')}])`,
-  //     )
-  //   }
+  if (!attachedProps.length) {
+    output.push(`export default _sfc_main`)
+  } else {
+    output.push(
+      `import _export_sfc from '${EXPORT_HELPER_ID}'`,
+      `export default /*#__PURE__*/_export_sfc(_sfc_main, [${attachedProps
+        .map(([key, val]) => `['${key}',${val}]`)
+        .join(',')}])`,
+    )
+  }
 
   // handle TS transpilation
   let resolvedCode = output.join('\n')
-  //   const lang = descriptor.scriptSetup?.lang || descriptor.script?.lang
+  const lang = descriptor.scriptSetup?.lang || descriptor.script?.lang
 
-  //   if (
-  //     lang &&
-  //     /tsx?$/.test(lang) &&
-  //     !descriptor.script?.src // only normal script can have src
-  //   ) {
-  //     const { code, map } = await transformWithEsbuild(
-  //       resolvedCode,
-  //       filename,
-  //       {
-  //         loader: 'ts',
-  //         target: 'esnext',
-  //         sourcemap: options.sourceMap,
-  //       },
-  //       resolvedMap,
-  //     )
-  //     resolvedCode = code
-  //     resolvedMap = resolvedMap ? (map as any) : resolvedMap
-  //   }
+  if (
+    lang &&
+    /tsx?$/.test(lang) &&
+    !descriptor.script?.src // only normal script can have src
+  ) {
+    const { code, map } = await transformWithEsbuild(
+      resolvedCode,
+      filename,
+      {
+        loader: 'ts',
+        target: 'esnext',
+        sourcemap: options.sourceMap,
+      },
+      resolvedMap,
+    )
+    resolvedCode = code
+    resolvedMap = resolvedMap ? (map as any) : resolvedMap
+  }
 
   return {
     code: resolvedCode,
@@ -334,44 +332,44 @@ async function genScriptCode(
   let scriptCode = `const ${scriptIdentifier} = {}`
   let map: RawSourceMap | undefined
 
-  //   const script = resolveScript(descriptor, options, ssr, customElement)
-  //   if (script) {
-  //     // If the script is js/ts and has no external src, it can be directly placed
-  //     // in the main module.
-  //     if (canInlineMain(descriptor, options)) {
-  //       if (!options.compiler.version) {
-  //         // if compiler-sfc exposes no version, it's < 3.3 and doesn't support
-  //         // genDefaultAs option.
-  //         const userPlugins = options.script?.babelParserPlugins || []
-  //         const defaultPlugins =
-  //           script.lang === 'ts'
-  //             ? userPlugins.includes('decorators')
-  //               ? (['typescript'] as const)
-  //               : (['typescript', 'decorators-legacy'] as const)
-  //             : []
-  //         scriptCode = options.compiler.rewriteDefault(
-  //           script.content,
-  //           scriptIdentifier,
-  //           [...defaultPlugins, ...userPlugins],
-  //         )
-  //       } else {
-  //         scriptCode = script.content
-  //       }
-  //       map = script.map
-  //     } else {
-  //       if (script.src) {
-  //         await linkSrcToDescriptor(script.src, descriptor, pluginContext, false)
-  //       }
-  //       const src = script.src || descriptor.filename
-  //       const langFallback = (script.src && path.extname(src).slice(1)) || 'js'
-  //       const attrsQuery = attrsToQuery(script.attrs, langFallback)
-  //       const srcQuery = script.src ? `&src=true` : ``
-  //       const query = `?docue&type=script${srcQuery}${attrsQuery}`
-  //       const request = JSON.stringify(src + query)
-  //       scriptCode =
-  //         `import _sfc_main from ${request}\n` + `export * from ${request}` // support named exports
-  //     }
-  //   }
+  const script = resolveScript(descriptor, options, ssr, customElement)
+  if (script) {
+    // If the script is js/ts and has no external src, it can be directly placed
+    // in the main module.
+    if (canInlineMain(descriptor, options)) {
+      if (!options.compiler.version) {
+        // if compiler-sfc exposes no version, it's < 3.3 and doesn't support
+        // genDefaultAs option.
+        const userPlugins = options.script?.babelParserPlugins || []
+        const defaultPlugins =
+          script.lang === 'ts'
+            ? userPlugins.includes('decorators')
+              ? (['typescript'] as const)
+              : (['typescript', 'decorators-legacy'] as const)
+            : []
+        scriptCode = options.compiler.rewriteDefault(
+          script.content,
+          scriptIdentifier,
+          [...defaultPlugins, ...userPlugins],
+        )
+      } else {
+        scriptCode = script.content
+      }
+      map = script.map
+    } else {
+      if (script.src) {
+        await linkSrcToDescriptor(script.src, descriptor, pluginContext, false)
+      }
+      const src = script.src || descriptor.filename
+      const langFallback = (script.src && path.extname(src).slice(1)) || 'js'
+      const attrsQuery = attrsToQuery(script.attrs, langFallback)
+      const srcQuery = script.src ? `&src=true` : ``
+      const query = `?docue&type=script${srcQuery}${attrsQuery}`
+      const request = JSON.stringify(src + query)
+      scriptCode =
+        `import _sfc_main from ${request}\n` + `export * from ${request}` // support named exports
+    }
+  }
   return {
     code: scriptCode,
     map,
@@ -385,71 +383,71 @@ async function genStyleCode(
   attachedProps: [string, string][],
 ) {
   let stylesCode = ``
-  //   let cssModulesMap: Record<string, string> | undefined
-  //   if (descriptor.styles.length) {
-  //     for (let i = 0; i < descriptor.styles.length; i++) {
-  //       const style = descriptor.styles[i]
-  //       if (style.src) {
-  //         await linkSrcToDescriptor(
-  //           style.src,
-  //           descriptor,
-  //           pluginContext,
-  //           style.scoped,
-  //         )
-  //       }
-  //       const src = style.src || descriptor.filename
-  //       // do not include module in default query, since we use it to indicate
-  //       // that the module needs to export the modules json
-  //       const attrsQuery = attrsToQuery(style.attrs, 'css')
-  //       const srcQuery = style.src
-  //         ? style.scoped
-  //           ? `&src=${descriptor.id}`
-  //           : '&src=true'
-  //         : ''
-  //       const directQuery = customElement ? `&inline` : ``
-  //       const scopedQuery = style.scoped ? `&scoped=${descriptor.id}` : ``
-  //       const query = `?docue&type=style&index=${i}${srcQuery}${directQuery}${scopedQuery}`
-  //       const styleRequest = src + query + attrsQuery
-  //       if (style.module) {
-  //         if (customElement) {
-  //           throw new Error(
-  //             `<style module> is not supported in custom elements mode.`,
-  //           )
-  //         }
-  //         const [importCode, nameMap] = genCSSModulesCode(
-  //           i,
-  //           styleRequest,
-  //           style.module,
-  //         )
-  //         stylesCode += importCode
-  //         Object.assign((cssModulesMap ||= {}), nameMap)
-  //       } else {
-  //         if (customElement) {
-  //           stylesCode += `\nimport _style_${i} from ${JSON.stringify(
-  //             styleRequest,
-  //           )}`
-  //         } else {
-  //           stylesCode += `\nimport ${JSON.stringify(styleRequest)}`
-  //         }
-  //       }
-  //       // TODO SSR critical CSS collection
-  //     }
-  //     if (customElement) {
-  //       attachedProps.push([
-  //         `styles`,
-  //         `[${descriptor.styles.map((_, i) => `_style_${i}`).join(',')}]`,
-  //       ])
-  //     }
-  //   }
-  //   if (cssModulesMap) {
-  //     const mappingCode =
-  //       Object.entries(cssModulesMap).reduce(
-  //         (code, [key, value]) => code + `"${key}":${value},\n`,
-  //         '{\n',
-  //       ) + '}'
-  //     stylesCode += `\nconst cssModules = ${mappingCode}`
-  //     attachedProps.push([`__cssModules`, `cssModules`])
-  //   }
+  let cssModulesMap: Record<string, string> | undefined
+  if (descriptor.styles.length) {
+    //     for (let i = 0; i < descriptor.styles.length; i++) {
+    //       const style = descriptor.styles[i]
+    //       if (style.src) {
+    //         await linkSrcToDescriptor(
+    //           style.src,
+    //           descriptor,
+    //           pluginContext,
+    //           style.scoped,
+    //         )
+    //       }
+    //       const src = style.src || descriptor.filename
+    //       // do not include module in default query, since we use it to indicate
+    //       // that the module needs to export the modules json
+    //       const attrsQuery = attrsToQuery(style.attrs, 'css')
+    //       const srcQuery = style.src
+    //         ? style.scoped
+    //           ? `&src=${descriptor.id}`
+    //           : '&src=true'
+    //         : ''
+    //       const directQuery = customElement ? `&inline` : ``
+    //       const scopedQuery = style.scoped ? `&scoped=${descriptor.id}` : ``
+    //       const query = `?docue&type=style&index=${i}${srcQuery}${directQuery}${scopedQuery}`
+    //       const styleRequest = src + query + attrsQuery
+    //       if (style.module) {
+    //         if (customElement) {
+    //           throw new Error(
+    //             `<style module> is not supported in custom elements mode.`,
+    //           )
+    //         }
+    //         const [importCode, nameMap] = genCSSModulesCode(
+    //           i,
+    //           styleRequest,
+    //           style.module,
+    //         )
+    //         stylesCode += importCode
+    //         Object.assign((cssModulesMap ||= {}), nameMap)
+    //       } else {
+    //         if (customElement) {
+    //           stylesCode += `\nimport _style_${i} from ${JSON.stringify(
+    //             styleRequest,
+    //           )}`
+    //         } else {
+    //           stylesCode += `\nimport ${JSON.stringify(styleRequest)}`
+    //         }
+    //       }
+    //       // TODO SSR critical CSS collection
+    //     }
+    //     if (customElement) {
+    //       attachedProps.push([
+    //         `styles`,
+    //         `[${descriptor.styles.map((_, i) => `_style_${i}`).join(',')}]`,
+    //       ])
+    //     }
+  }
+  if (cssModulesMap) {
+    //     const mappingCode =
+    //       Object.entries(cssModulesMap).reduce(
+    //         (code, [key, value]) => code + `"${key}":${value},\n`,
+    //         '{\n',
+    //       ) + '}'
+    //     stylesCode += `\nconst cssModules = ${mappingCode}`
+    //     attachedProps.push([`__cssModules`, `cssModules`])
+  }
   return stylesCode
 }
 
@@ -473,19 +471,19 @@ async function genCustomBlockCode(
   pluginContext: PluginContext,
 ) {
   let code = ''
-  //   for (let index = 0; index < descriptor.customBlocks.length; index++) {
-  //     const block = descriptor.customBlocks[index]
-  //     if (block.src) {
-  //       await linkSrcToDescriptor(block.src, descriptor, pluginContext, false)
-  //     }
-  //     const src = block.src || descriptor.filename
-  //     const attrsQuery = attrsToQuery(block.attrs, block.type)
-  //     const srcQuery = block.src ? `&src=true` : ``
-  //     const query = `?docue&type=${block.type}&index=${index}${srcQuery}${attrsQuery}`
-  //     const request = JSON.stringify(src + query)
-  //     code += `import block${index} from ${request}\n`
-  //     code += `if (typeof block${index} === 'function') block${index}(_sfc_main)\n`
-  //   }
+  for (let index = 0; index < descriptor.customBlocks.length; index++) {
+    //     const block = descriptor.customBlocks[index]
+    //     if (block.src) {
+    //       await linkSrcToDescriptor(block.src, descriptor, pluginContext, false)
+    //     }
+    //     const src = block.src || descriptor.filename
+    //     const attrsQuery = attrsToQuery(block.attrs, block.type)
+    //     const srcQuery = block.src ? `&src=true` : ``
+    //     const query = `?docue&type=${block.type}&index=${index}${srcQuery}${attrsQuery}`
+    //     const request = JSON.stringify(src + query)
+    //     code += `import block${index} from ${request}\n`
+    //     code += `if (typeof block${index} === 'function') block${index}(_sfc_main)\n`
+  }
   return code
 }
 
