@@ -1,7 +1,27 @@
 <template>
   <h1>Docue version {{ version }}</h1>
+  <div class="comments"><!--hello--></div>
+  <pre>{{ time as string }}</pre>
+  <div class="hmr-block">
+    <Hmr />
+  </div>
+  <div class="hmr-tsx-block">
+    <HmrTsx />
+  </div>
+  <TypeProps msg="msg" bar="bar" :id="123" />
+  <Syntax />
+  <PreProcessors />
+  <PreProcessorsHmr />
 </template>
 
 <script setup lang="ts">
 import { ref, version, defineAsyncComponent } from 'docuejs'
+import Hmr from './Hmr.docue'
+import HmrTsx from './HmrTsx.docue'
+import TypeProps from './TypeProps.docue'
+import Syntax from './Syntax.docue'
+import PreProcessors from './PreProcessors.docue'
+import PreProcessorsHmr from './PreProcessorsHmr.docue'
+
+const time = ref('loading...')
 </script>
